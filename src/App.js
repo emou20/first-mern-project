@@ -1,23 +1,20 @@
-import logo from './logo.svg';
+import Router from './Routes/Router';
 import './App.css';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+// pick a date util library
+import DateFnsUtils from '@date-io/date-fns';
+import AutoLogout from './component/AutoLogout';
+
+
+
 
 function App() {
+  AutoLogout();
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+       <MuiPickersUtilsProvider utils={DateFnsUtils}>
+       <Router />
+       </MuiPickersUtilsProvider>
     </div>
   );
 }

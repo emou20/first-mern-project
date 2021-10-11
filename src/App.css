@@ -1,38 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web&display=swap');
 .App {
+  text-align: center;
+  font-family: 'Titillium Web', sans-serif;
+}
+
+.continput {
+  padding: 10px;
+  width: 45%;
+  float: left;
+}
+
+.contFormAuth .continput {
+  padding: 10px;
+  width: 94%;
+  float: left;
+}
+.contFormAuth .continput .MuiFormControl-root{
+  width:100%;
+}
+
+.contFormAuth .contBttEnvoyer {
+  width:82%;
+}
+.contBttEnvoyer {
+  padding: 25px;
+    float: left;
+    width: 100%;
+}
+.contDeleteUser button, .contEditUser button.bttIcone {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.backBlack {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0,0,0, 0.5);
+  left: 0;
+  top: 0;
+}
+.contPoupFormEdit {
+  width: 60%;
+  height: auto;
+  overflow: scroll;
+  padding: 20px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border: 1px #ccc solid;
+  z-index: 5;
+}
+.contPoupFormEdit h3{
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.validBtt {
+  float: left;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.bttRole {
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.contAddRole .bttRole {
+  float: right;
+    margin-bottom: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+.contHeader {
+ /* width: 100%;*/
+  height: 50px;
+  background-color:#000;
+  padding: 10px 25px;
+  color: #fff;
+}
+.contUserHeaderModule {
+  float: right;
+  width: 100%;
+}
+.pageAuthen {
+  background-color: #eee;
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  height: 100vh;
+}
+.contFormAuth {
+  width: 350px;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  left: 50%;
+  top: 50%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.error {
+  color: crimson;
+}
+
+.datepicker .MuiTextField-root {
+  width: 100%;
+}
+
+.contGlob {
+  width: 100%;
+  float: left;
+  margin-bottom: 35px;
+}
+
+/**** pagination **/
+
+.pagination {
+  width: 100%;
+  float: left;
+  margin: 15px 0px;
+}
+.pagination li{
+  display: inline;
+  float: left;
+}
+
+.pagination li button{
+  width: auto;
+  height: 35px;
+  border: 1px #eee solid;
+  display: block;
+  margin: 0 5px;
+  padding:5px 10px;
+  cursor: pointer;
+}
+.pagination li.active button{
+  background-color: black;
+  color: #eee;
+}
+
+.contUserHeaderModule ul  {
+  list-style: none;
+  float: left;
+}
+.contUserHeaderModule ul li {
+  display: block;
+  padding: 0px 15px;
+  float: right;
+}
+
+.contUserHeaderModule ul li a{
+  display: block;
+  text-decoration: none;
+  color: #fff;
+}
+.contUserHeaderModule .UserConnectBlock {
+  display: inline;
+  float: right;
+  margin-left: 45px;
+  border-left: 1px #eee solid;
+  padding-left: 35px;
 }
