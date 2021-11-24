@@ -7,10 +7,10 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
-import { FaUserEdit } from "react-icons/fa";
+import Header from "./Header";
 
 const EditUser = (props) => {
-    const [show, setShow] = useState(false);
+
     const [firstName, setfirstName] = useState("");
     const [lastName, setlastName] = useState("");
     const [date, setdate] = useState("");
@@ -19,11 +19,15 @@ const EditUser = (props) => {
     const [phone, setphone] = useState("");
     const [probGlob, setProbGlob] = useState("");
 
+    const [file, setFile] = useState('');
+    const [localFoto, setLocalFoto] = useState('');
+    const [fotoCarger, setFotoCarger] = useState(false);
+
 
     useEffect(() => {
-       /* axios({
+        axios({
             method: 'get',
-            url: `http://localhost:5000/api/user/${props.idUser}`
+            url: `http://localhost:5000/api/user/${props.match.params.idUser}`
         })
             .then(response => {
                 if (response.status === 200) {
@@ -33,162 +37,172 @@ const EditUser = (props) => {
                     setadress(response.data.adress);
                     setemail(response.data.email);
                     setphone(response.data.phone);
+                    setLocalFoto(response.data.foto)
 
                 } else {
                     console.log(response.data)
                 }
-                
-            });*/
-            
+
+            });
+
     }, []);
 
     const updateInfo = () => {
-        const inscription = { firstName, lastName, date, adress, email, phone };
-        axios.put(`http://localhost:5000/api/user/${props.idUser}`, inscription)
-        .then(response => {
-            console.log(response.status) ;
-            if(response.status !== 500){
-                setShow(false);
-                props.changeEtatEdit(true);
-            } else{
-                setProbGlob("Problème d'inscription, essayer une autre fois !");
-                console.log(response.data);
-            }
-        });
-    }
 
-    const showFormEdit = () => {
-        setShow(true);
-        try {
-            axios.get(`http://localhost:5000/api/user/${props.idUser}`)
-                .then(response => {
-                    if (response.status === 200) {
-                        setfirstName(response.data.firstName);
-                        setlastName(response.data.lastName);
-                        setdate(response.data.date);
-                        setadress(response.data.adress);
-                        setemail(response.data.email);
-                        setphone(response.data.phone);
-    
-                    } else {
-                        console.log(response.data)
-                    }
-                    
-                });
-        }catch(err){
-            console.log(err);
+        const data = new FormData();
 
+            data.append("firstName", firstName);
+            data.append("lastName", lastName);
+            data.append("date", date);
+            data.append("adress", adress);
+            data.append("email", email);
+            data.append("phone", phone);
+
+        if (file){
+            data.append("file", file);    
+        }else {
+            data.append("file", localFoto);
         }
-        
+
+        axios.put(`http://localhost:5000/api/user/${props.match.params.idUser}`, data)
+            .then(response => {
+                console.log(response.status);
+                if (response.status !== 500) {
+                    console.log("ok")
+                } else {
+                    setProbGlob("Problème d'inscription, essayer une autre fois !");
+                    console.log(response.data);
+                }
+            });
     }
-    const closePopUp = () => {
-        setShow(false);
+
+    const handelPicture = (e) => {
+        setLocalFoto(URL.createObjectURL(e.target.files[0]));
+        setFile(e.target.files[0]);
+        setFotoCarger(true)
     }
+
     return (
         <div className="contEditUser">
-            <button className="bttIcone" onClick={() => showFormEdit()}><FaUserEdit /></button>
-            {show &&
-            <div className="backBlack">
-                <div className="contPoupFormEdit">
-                    <Container>
-                    <h3>Modification de l'utilisateur {firstName} {lastName}</h3>
-                        <Card>
-                            <CardContent>
-                                
-                                <div>{probGlob}</div>
-                                <form noValidate autoComplete="off">
-                                    <div className="continput">
-                                        <FormControl fullWidth>
-                                            <InputLabel htmlFor="standard-adornment-amount">Votre nom</InputLabel>
-                                            <Input
-                                                id="firstName"
-                                                value={firstName}
-                                                onChange={(e) => setfirstName(e.target.value)}
-                                                name="firstName"
+            <Header />
 
-                                            />
-                                        </FormControl>
+
+            <Container>
+                <h3>Modification de l'utilisateur {firstName} {lastName}</h3>
+                <Card>
+                    <CardContent>
+
+                        <div>{probGlob}</div>
+                        <form noValidate autoComplete="off">
+                            <div className="continput100">
+                                <div className="contPhotoUser">
+                                    {localFoto === '' || localFoto === undefined ? (
+                                        <img src="../default-user-icon-profile.png" alt="" />
+                                    ) : (
+                                        fotoCarger ? <img src={localFoto} alt="" /> : <img src={`${process.env.REACT_APP_API_URL}/upload/${localFoto}`} alt="" />  
+                                    )
+
+                                    }
+                                    <div className="contInputPhoto">
+                                        <input type="file" name="photo" onChange={(e) => handelPicture(e)} />
                                     </div>
-                                    <div className="continput">
-                                        <FormControl fullWidth>
-                                            <InputLabel htmlFor="standard-adornment-amount">Votre prénom</InputLabel>
-                                            <Input
-                                                id="lastName"
-                                                value={lastName}
-                                                onChange={(e) => setlastName(e.target.value)}
-                                                name="lastName"
+                                </div>
 
-                                            />
-                                        </FormControl>
-                                    </div>
 
-                                    <div className="continput">
-                                        <FormControl fullWidth>
-                                            <InputLabel htmlFor="standard-adornment-amount">Votre date de naissance</InputLabel>
-                                            <Input
-                                                id="date"
-                                                value={date}
-                                                onChange={(e) => setdate(e.target.value)}
-                                                name="date"
+                            </div>
+                            <div className="rightCol">
+                                <div className="continput">
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="standard-adornment-amount">Votre nom</InputLabel>
+                                        <Input
+                                            id="firstName"
+                                            value={firstName}
+                                            onChange={(e) => setfirstName(e.target.value)}
+                                            name="firstName"
 
-                                            />
-                                        </FormControl>
-                                    </div>
-                                    <div className="continput">
-                                        <FormControl fullWidth>
-                                            <InputLabel htmlFor="standard-adornment-amount">Votre adresse</InputLabel>
-                                            <Input
-                                                id="adress"
-                                                value={adress}
-                                                onChange={(e) => setadress(e.target.value)}
-                                                name="adress"
+                                        />
+                                    </FormControl>
+                                </div>
+                                <div className="continput">
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="standard-adornment-amount">Votre prénom</InputLabel>
+                                        <Input
+                                            id="lastName"
+                                            value={lastName}
+                                            onChange={(e) => setlastName(e.target.value)}
+                                            name="lastName"
 
-                                            />
-                                        </FormControl>
-                                    </div>
-                                    <div className="continput">
-                                        <FormControl fullWidth>
-                                            <InputLabel htmlFor="standard-adornment-amount">Votre email</InputLabel>
-                                            <Input
-                                                id="email"
-                                                value={email}
-                                                onChange={(e) => setemail(e.target.value)}
-                                                name="email"
+                                        />
+                                    </FormControl>
+                                </div>
 
-                                            />
-                                        </FormControl>
-                                    </div>
-                                    <div className="continput">
-                                        <FormControl fullWidth>
-                                            <InputLabel htmlFor="standard-adornment-amount">Votre numéro de téléphone</InputLabel>
-                                            <Input
-                                                id="phone"
-                                                value={phone}
-                                                onChange={(e) => setphone(e.target.value)}
-                                                name="phone"
+                                <div className="continput">
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="standard-adornment-amount">Votre date de naissance</InputLabel>
+                                        <Input
+                                            id="date"
+                                            value={date}
+                                            onChange={(e) => setdate(e.target.value)}
+                                            name="date"
 
-                                            />
-                                        </FormControl>
-                                    </div>
+                                        />
+                                    </FormControl>
+                                </div>
+                                <div className="continput">
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="standard-adornment-amount">Votre adresse</InputLabel>
+                                        <Input
+                                            id="adress"
+                                            value={adress}
+                                            onChange={(e) => setadress(e.target.value)}
+                                            name="adress"
 
-                                    <div className="contBttEnvoyer">
-                                        <Button variant="contained" color="primary" className="validBtt" disableElevation onClick={() => updateInfo()}>
-                                            Enregistrer
-                                        </Button>
+                                        />
+                                    </FormControl>
+                                </div>
+                                <div className="continput">
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="standard-adornment-amount">Votre email</InputLabel>
+                                        <Input
+                                            id="email"
+                                            value={email}
+                                            onChange={(e) => setemail(e.target.value)}
+                                            name="email"
 
-                                        <Button variant="contained" color="secondary" disableElevation onClick={() => closePopUp()}>
-                                            Annuler
-                                        </Button>
-                                    </div>
+                                        />
+                                    </FormControl>
+                                </div>
+                                <div className="continput">
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="standard-adornment-amount">Votre numéro de téléphone</InputLabel>
+                                        <Input
+                                            id="phone"
+                                            value={phone}
+                                            onChange={(e) => setphone(e.target.value)}
+                                            name="phone"
 
-                                </form>
-                            </CardContent>
+                                        />
+                                    </FormControl>
+                                </div>
 
-                        </Card>
-                    </Container>
-                </div>
-            </div>
-            }
+                                <div className="contBttEnvoyer">
+                                    <Button variant="contained" color="primary" className="validBtt" disableElevation onClick={() => updateInfo()}>
+                                        Enregistrer
+                                    </Button>
+
+                                    <Button variant="contained" color="secondary" disableElevation>
+                                        Annuler
+                                    </Button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </CardContent>
+
+                </Card>
+            </Container>
+
+
 
 
         </div>

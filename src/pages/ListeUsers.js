@@ -9,13 +9,13 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 
-import EditUser from '../component/EditUser';
 import DeleteUser from '../component/DeleteUser';
-import EditUserRole from '../component/EditUserRole';
-import Inscription from './Inscription' ;
 import Pagination from '../component/Pagination';
+import Header from '../component/Header';
 
-
+import { Link } from 'react-router-dom';
+import { FaPlusCircle } from "react-icons/fa";
+import { FaUserEdit } from "react-icons/fa";
 
 const ListeUsers = (props) => {
     const [users, setUsers] = useState([]);
@@ -55,11 +55,13 @@ console.log(pageOfItems.length);
     return (
 
         <div>
+            <Header />
             <h1>Liste des utilisateurs</h1>
             
                 <div>
                     <Container>
-                        <Inscription changeEtatListe={changeEtat.bind()}/>
+                        <Link to="/Inscription" className="linkAdd"><FaPlusCircle /> Ajouter un utilisateur</Link>
+                        
                         <TableContainer component={Paper}>
                             <Table size="small" aria-label="a dense table">
                                 <TableHead>
@@ -84,10 +86,8 @@ console.log(pageOfItems.length);
                                             <TableCell align="right">{el.email}</TableCell>
                                             <TableCell align="right">{el.adress}</TableCell>
                                             <TableCell align="right">{el.phone}</TableCell>
-                                            <TableCell align="right">
-                                                <EditUserRole role={el.role} idUser={el._id}  changeEtatEdit={changeEtat.bind()}/>
-                                           </TableCell>
-                                            <TableCell align="right"><EditUser idUser={el._id} changeEtatEdit={changeEtat.bind()} /></TableCell>
+                                            <TableCell align="right">{el.role}</TableCell>
+                                            <TableCell align="right"><Link to={`/editUser/${el._id}`}><FaUserEdit /></Link> </TableCell>
                                             <TableCell align="right"><DeleteUser idUser={el._id} changeEtatDelete={changeEtat.bind()} /></TableCell>
                                         </TableRow>
                                     ))}

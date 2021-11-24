@@ -9,12 +9,13 @@ import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import Header from '../component/Header';
+import FormatDate from '../component/FormatDate';
 
-import FilledInput from '@mui/material/FilledInput';
+
 
 import { DatePicker } from "@material-ui/pickers";
 
-import { FaPlusCircle } from "react-icons/fa";
 
 
 const Inscription = (props) => {
@@ -28,13 +29,14 @@ const Inscription = (props) => {
     const [role, setNvRole] = useState('');
     const [login, setLogin] = useState('');
     const [pass, setPass] = useState('');
+    const [file, setFile] = useState('');
+    const [localFoto, setLocalFoto] = useState('');
 
-    const [show, setShow] = useState(false);
     const [inscri, setInscri] = useState(false);
 
     const [roles, setRoles] = useState([]);
 
-
+    let dateNaissance = FormatDate('Thu Aug 14 1986 15:14:00 GMT+0200 (Central European Summer Time)');
 
     //variables de vérification
     const [errorFirstName, setErrorFirstName] = useState("");
@@ -141,19 +143,36 @@ const Inscription = (props) => {
 
 
     const sendInfo = () => {
-
+        console.log("file : ",file)
         const isValid = verifForm();
 
         if (isValid) {
-            const inscription = { firstName, lastName, date, adress, email, phone, role, login, pass };
-            axios.post('http://localhost:5000/api/user/register/', inscription)
+
+            const data = new FormData();
+
+            data.append("firstName", firstName);
+            data.append("lastName", lastName);
+            data.append("date", dateNaissance);
+            data.append("adress", adress);
+            data.append("email", email);
+            data.append("phone", phone);
+            data.append("role", role);
+            data.append("login", login);
+            data.append("pass", pass);
+            if (file) {
+                data.append("file", file);
+            }
+
+
+
+            
+            axios.post('http://localhost:5000/api/user/register/', data)
                 .then(response => {
                     console.log(response.status);
                     if (response.status === 201) {
-                        props.changeEtatListe(true);
+                        //props.changeEtatListe(true);
                         setInscri(true);
                         setTimeout(function () {
-                            setShow(false);
                             setInscri(false);
                             setfirstName("");
                             setlastName("");
@@ -164,6 +183,7 @@ const Inscription = (props) => {
                             setLogin("");
                             setPass("");
                             setNvRole("");
+                            setLocalFoto("")
 
                         }, 3000);
 
@@ -196,184 +216,204 @@ const Inscription = (props) => {
             });
     }, [])
 
-    const showFormAdd = () => {
-        setShow(true);
+    const clearForm = () => {
+        setfirstName("");
+        setlastName("");
+        setdate("");
+        setadress("");
+        setemail("");
+        setphone("");
+        setLogin("");
+        setPass("");
+        setNvRole("");
     }
 
-    const closePopUp = () => {
-        setShow(false);
+    const handelPicture = (e) => {
+        setLocalFoto(URL.createObjectURL(e.target.files[0]));
+        setFile(e.target.files[0]);
     }
-
 
     return (
         <div className="contAddRole">
-            <button className="bttRole" onClick={() => showFormAdd()}><FaPlusCircle /> Ajouter un utilisateur</button>
+            <Header />
+            <h1>Ajout Utilisateur </h1>
+            {inscri ?
+                (
+                    <h4>l'utilisateur est inscrit avec succée</h4>
+                ) : (
+                    <Container>
+                        <Card>
+                            <CardContent>
+                                <div>{probGlob}</div>
+                                <form noValidate autoComplete="off">
+                                    <div className="continput100">
+                                        <div className="contPhotoUser">
+                                            {localFoto === '' ? (
+                                                <img src="default-user-icon-profile.png" alt="" />
+                                            ) : (
+                                                <img src={localFoto} alt="" />
+                                            )
 
-            {show &&
-                <div className="backBlack">
-                    <div className="contPoupFormEdit">
+                                            }
+                                            <div className="contInputPhoto">
+                                                <input type="file" name="photo" onChange={(e) => handelPicture(e)} />
+                                            </div>
+                                        </div>
+                                        
 
-                        <h1>Ajout Utilisateur </h1>
-                        {inscri ?
-                            (
-                                <h4>l'utilisateur est inscrit avec succée</h4>
-                            ) : (
-                                <Container>
-                                    <Card>
-                                        <CardContent>
-                                            <div>{probGlob}</div>
-                                            <form noValidate autoComplete="off">
-                                                <div className="continput">
-                                                    <FormControl fullWidth>
-                                                        <InputLabel htmlFor="standard-adornment-amount">Votre nom</InputLabel>
-                                                        <Input
-                                                            id="firstName"
-                                                            value={firstName}
-                                                            onChange={(e) => setfirstName(e.target.value)}
-                                                            name="firstName"
+                                    </div>
+                                <div className="rightCol">
+                                    <div className="continput">
+                                        <FormControl fullWidth>
+                                            <InputLabel htmlFor="standard-adornment-amount">Votre nom</InputLabel>
+                                            <Input
+                                                id="firstName"
+                                                value={firstName}
+                                                onChange={(e) => setfirstName(e.target.value)}
+                                                name="firstName"
 
-                                                        />
-                                                    </FormControl>
-                                                    <div className="error">{errorFirstName}</div>
-                                                </div>
-                                                <div className="continput">
-                                                    <FormControl fullWidth>
-                                                        <InputLabel htmlFor="standard-adornment-amount">Votre prénom</InputLabel>
-                                                        <Input
-                                                            id="lastName"
-                                                            value={lastName}
-                                                            onChange={(e) => setlastName(e.target.value)}
-                                                            name="lastName"
+                                            />
+                                        </FormControl>
+                                        <div className="error">{errorFirstName}</div>
+                                    </div>
+                                    <div className="continput">
+                                        <FormControl fullWidth>
+                                            <InputLabel htmlFor="standard-adornment-amount">Votre prénom</InputLabel>
+                                            <Input
+                                                id="lastName"
+                                                value={lastName}
+                                                onChange={(e) => setlastName(e.target.value)}
+                                                name="lastName"
 
-                                                        />
-                                                    </FormControl>
-                                                    <div className="error">{errorLastName}</div>
-                                                </div>
+                                            />
+                                        </FormControl>
+                                        <div className="error">{errorLastName}</div>
+                                    </div>
 
-                                                <div className="continput datepicker">
+                                    <div className="continput datepicker">
 
-                                                    <DatePicker
-                                                        disableFuture
-                                                        openTo="year"
-                                                        format="dd/MM/yyyy"
-                                                        label="Date de naissance"
-                                                        views={["year", "month", "date"]}
-                                                        value={date}
-                                                        onChange={setdate}
-                                                    />
+                                        <DatePicker
+                                            disableFuture
+                                            openTo="year"
+                                            format="dd/MM/yyyy"
+                                            label="Date de naissance"
+                                            views={["year", "month", "date"]}
+                                            value={date}
+                                            onChange={setdate}
+                                        />
 
-                                                    <div className="error">{errorDate}</div>
+                                        <div className="error">{errorDate}</div>
 
-                                                </div>
-                                                <div className="continput">
-                                                    <FormControl fullWidth>
-                                                        <InputLabel htmlFor="standard-adornment-amount">Votre adresse</InputLabel>
-                                                        <Input
-                                                            id="adress"
-                                                            value={adress}
-                                                            onChange={(e) => setadress(e.target.value)}
-                                                            name="adress"
+                                    </div>
+                                    <div className="continput">
+                                        <FormControl fullWidth>
+                                            <InputLabel htmlFor="standard-adornment-amount">Votre adresse</InputLabel>
+                                            <Input
+                                                id="adress"
+                                                value={adress}
+                                                onChange={(e) => setadress(e.target.value)}
+                                                name="adress"
 
-                                                        />
-                                                    </FormControl>
-                                                    <div className="error">{errorAdress}</div>
-                                                </div>
-                                                <div className="continput">
-                                                    <FormControl fullWidth>
-                                                        <InputLabel htmlFor="standard-adornment-amount">Votre email</InputLabel>
-                                                        <Input
-                                                            id="email"
-                                                            value={email}
-                                                            onChange={(e) => setemail(e.target.value)}
-                                                            name="email"
+                                            />
+                                        </FormControl>
+                                        <div className="error">{errorAdress}</div>
+                                    </div>
+                                    <div className="continput">
+                                        <FormControl fullWidth>
+                                            <InputLabel htmlFor="standard-adornment-amount">Votre email</InputLabel>
+                                            <Input
+                                                id="email"
+                                                value={email}
+                                                onChange={(e) => setemail(e.target.value)}
+                                                name="email"
 
-                                                        />
-                                                    </FormControl>
-                                                    <div className="error">{errorEmail}</div>
-                                                </div>
-                                                <div className="continput">
-                                                    <FormControl fullWidth>
-                                                        <InputLabel htmlFor="standard-adornment-amount">Votre numéro de téléphone</InputLabel>
-                                                        <Input
-                                                            id="phone"
-                                                            value={phone}
-                                                            onChange={(e) => setphone(e.target.value)}
-                                                            name="phone"
-                                                            type="number"
+                                            />
+                                        </FormControl>
+                                        <div className="error">{errorEmail}</div>
+                                    </div>
+                                    <div className="continput">
+                                        <FormControl fullWidth>
+                                            <InputLabel htmlFor="standard-adornment-amount">Votre numéro de téléphone</InputLabel>
+                                            <Input
+                                                id="phone"
+                                                value={phone}
+                                                onChange={(e) => setphone(e.target.value)}
+                                                name="phone"
+                                                type="number"
 
-                                                        />
-                                                    </FormControl>
-                                                    <div className="error">{errorPhone}</div>
-                                                </div>
-                                                <div className="continput">
-                                                    <FormControl fullWidth>
-                                                        <InputLabel htmlFor="standard-adornment-amount">Role</InputLabel>
-                                                        <Select
-                                                            labelId="demo-simple-select-label"
-                                                            id="demo-simple-select"
-                                                            value={role}
-                                                            onChange={(e) => setNvRole(e.target.value.toString())}
-                                                        >
-                                                            {
-                                                                roles.map((el, index) => (
-                                                                    <MenuItem key={index} value={el.coefition}>{el.nameGroupe}</MenuItem>
-                                                                ))}
+                                            />
+                                        </FormControl>
+                                        <div className="error">{errorPhone}</div>
+                                    </div>
+                                    <div className="continput">
+                                        <FormControl fullWidth>
+                                            <InputLabel htmlFor="standard-adornment-amount">Role</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={role}
+                                                onChange={(e) => setNvRole(e.target.value)}
+                                            >
+                                                {
+                                                    roles.map((el, index) => (
+                                                        <MenuItem key={index} value={el.nameGroupe}>{el.nameGroupe}</MenuItem>
+                                                        ))}
 
-                                                        </Select>
-                                                    </FormControl>
-                                                    <div className="error">{errorRole}</div>
-                                                </div>
+                                            </Select>
+                                        </FormControl>
+                                        <div className="error">{errorRole}</div>
+                                    </div>
 
-                                                <div className="continput">
-                                                    <FormControl fullWidth>
-                                                        <InputLabel htmlFor="standard-adornment-amount">Login</InputLabel>
-                                                        <Input
-                                                            id="login"
-                                                            value={login}
-                                                            onChange={(e) => setLogin(e.target.value)}
-                                                            name="login"
+                                    <div className="continput">
+                                        <FormControl fullWidth>
+                                            <InputLabel htmlFor="standard-adornment-amount">Login</InputLabel>
+                                            <Input
+                                                id="login"
+                                                value={login}
+                                                onChange={(e) => setLogin(e.target.value)}
+                                                name="login"
 
-                                                        />
-                                                    </FormControl>
-                                                    <div className="error">{errorLogin}</div>
-                                                </div>
-                                                <div className="continput">
-                                                    <FormControl fullWidth>
-                                                        <InputLabel htmlFor="standard-adornment-amount">Votre mot de passe</InputLabel>
-                                                        <Input
-                                                            id="pass"
-                                                            value={pass}
-                                                            onChange={(e) => setPass(e.target.value)}
-                                                            name="pass"
+                                            />
+                                        </FormControl>
+                                        <div className="error">{errorLogin}</div>
+                                    </div>
+                                    <div className="continput">
+                                        <FormControl fullWidth>
+                                            <InputLabel htmlFor="standard-adornment-amount">Votre mot de passe</InputLabel>
+                                            <Input
+                                                id="pass"
+                                                value={pass}
+                                                onChange={(e) => setPass(e.target.value)}
+                                                name="pass"
 
-                                                        />
-                                                    </FormControl>
-                                                    <div className="error">{errorPass}</div>
-                                                </div>
-                                                
+                                            />
+                                        </FormControl>
+                                        <div className="error">{errorPass}</div>
+                                    </div>
 
-                                                <div className="contBttEnvoyer">
-                                                    <Button variant="contained" color="primary" disableElevation onClick={() => sendInfo()}>
-                                                        Enregistrer
-                                                    </Button>
 
-                                                    <Button variant="contained" color="secondary" disableElevation onClick={() => closePopUp()}>
-                                                        Annuler
-                                                    </Button>
-                                                </div>
+                                    <div className="contBttEnvoyer">
+                                        <Button variant="contained" color="primary" disableElevation onClick={() => sendInfo()}>
+                                            Enregistrer
+                                        </Button>
 
-                                            </form>
-                                        </CardContent>
+                                        <Button variant="contained" color="secondary" disableElevation onClick={() => clearForm()}>
+                                            Annuler
+                                        </Button>
+                                    </div>
 
-                                    </Card>
-                                </Container>
+                                </div>
 
-                            )
+                                </form>
+                            </CardContent>
 
-                        }
-                    </div>
-                </div>
+                        </Card>
+                    </Container>
+
+                )
+
             }
+
 
         </div>
     );

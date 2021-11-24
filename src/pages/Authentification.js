@@ -27,8 +27,9 @@ const Authentification = (props) => {
     }, [dispatch, idUser]);
 
 
-    const loginIn = () => {
 
+    const loginIn = (event) => {
+        event.preventDefault()
         axios.post('http://localhost:5000/api/user/login/', {login, pass},{withCredentials: true, credentials: 'include'} )
         .then(response => {
             console.log(response.data.user);
@@ -50,7 +51,7 @@ const Authentification = (props) => {
                         <CardContent>
                             <h4>Authentification</h4>
                             
-                            <form noValidate autoComplete="off">
+                            <form noValidate autoComplete="off" onSubmit={(event) => loginIn(event)}>
                                 <div className="continput">
                                     <TextField
                                         id="outlined-search"
@@ -73,7 +74,7 @@ const Authentification = (props) => {
                                 </div>
                                 <div className="error">{errorPass}</div>
                                 <div className="contBttEnvoyer">
-                                        <Button variant="contained" color="primary" disableElevation onClick={() => loginIn()}>
+                                        <Button type="submit" variant="contained" color="primary" disableElevation>
                                             Connecter
                                         </Button>
                                     </div>

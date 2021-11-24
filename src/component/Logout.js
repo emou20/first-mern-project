@@ -17,6 +17,7 @@ const Logout = () => {
 
         if (logout) {
             dispatch(clearUserId());
+            window.location.href = "/login";
             
         }
     }, [dispatch, logout]);
@@ -39,10 +40,13 @@ const Logout = () => {
         //deleteAllCookies();
         
         setLogout(true);
-        dremoveCookie("jwt")  ;
-        axios.get('http://localhost:5000/api/user/connexion/logout', { withCredentials: true, credentials: 'include' }).then(() => {
+        dremoveCookie("jwt");
+       /* axios.get('http://localhost:5000/api/user/connexion/logout', { withCredentials: true, credentials: 'include' }).then(() => {
             
-        }).catch((err) => console.log(err));
+        }).catch((err) => console.log(err));*/
+
+
+
     }
     return (
         <div>
