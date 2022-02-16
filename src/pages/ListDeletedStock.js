@@ -10,7 +10,6 @@ import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 import Pagination from '../component/Pagination';
 import Header from '../component/Header';
-import ProductName from '../component/ProductName';
 
 const ListDeletedStock = () => {
     const [deletedStock, setDeletedStock] = useState([]);
@@ -67,8 +66,8 @@ const ListDeletedStock = () => {
                                     <TableBody>
                                         {pageOfItems.map((el, index) => (
                                             <TableRow key={index}>
-                                                <TableCell align="left">{el.idProduct} </TableCell>
-                                                <TableCell align="left"><ProductName idProduct={el.idProduct} /></TableCell>
+                                                <TableCell align="left">{el.idProduct._id} </TableCell>
+                                                <TableCell align="left">{el.idProduct.nom}</TableCell>
                                                 <TableCell align="left">{el.idUser}</TableCell>
                                                 <TableCell align="left">- {el.deletedAmount}</TableCell>
                                                 <TableCell align="left">{el.pattern}</TableCell>

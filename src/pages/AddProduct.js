@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -8,6 +8,8 @@ import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import Header from '../component/Header';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const AddProduct = () => {
 
@@ -21,6 +23,8 @@ const AddProduct = () => {
     const [errorDesc, setErrorDesc] = useState("");
     const [errorFoto, setErrorFoto] = useState("");
     const [propGlob, setPropGlob] = useState("");
+    const [categories, setCategories] = useState([]);
+    const [categorie, setIdCategory] = useState("");
     
     const [ajout, setAjout] = useState(false);
 
@@ -77,6 +81,7 @@ const AddProduct = () => {
             data.append("nom", nom);
             data.append("ref", ref);
             data.append("desc", desc);
+            data.append("categorie", categorie);
 
             if (file) {
                 data.append("file", file);
@@ -93,8 +98,11 @@ const AddProduct = () => {
                             setRef("");
                             setDesc("");
                             setLocalFoto("");
+                            setIdCategory("");
+                            setPropGlob("");
+                            setLocalFoto("");
 
-                        }, 3000);
+                        }, 1000);
 
                     } else {
                         setPropGlob("Problème d'ajout, essayer une autre fois !");
@@ -119,6 +127,22 @@ const AddProduct = () => {
         setDesc("");
         setLocalFoto("");
     }
+
+
+    useEffect(() => {
+        axios.get('http://localhost:5000/api/category/', { withCredentials: true, credentials: 'include' }
+        )
+            .then(response => {
+                if (response.status === 200) {
+                    setCategories(response.data);
+                    console.log(response.data);
+
+                } else {
+                    console.log(response.data)
+                }
+
+            });
+    }, [])
 
 
     return (
@@ -182,6 +206,24 @@ const AddProduct = () => {
                                             name="desc"
 
                                         />
+                                    </FormControl>
+                                    <div className="error">{errorDesc}</div>
+                                </div>
+                                <div className="continput1000">
+                                    <FormControl fullWidth>
+                                        <InputLabel htmlFor="standard-adornment-amount">Catégorie du produit</InputLabel>
+                                        <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={categorie}
+                                                onChange={(e) => setIdCategory(e.target.value)}
+                                            >
+                                                {
+                                                    categories.map((el, index) => (
+                                                        <MenuItem key={index} value={el._id}>{el.nameCategory}</MenuItem>
+                                                        ))}
+
+                                            </Select>
                                     </FormControl>
                                     <div className="error">{errorDesc}</div>
                                 </div>

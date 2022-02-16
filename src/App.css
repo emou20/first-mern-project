@@ -16,7 +16,11 @@
   width: 87%;
   float: left;
   margin-bottom: 13px;
-  text-align: center;
+  text-align: left;
+}
+
+.MuiNativeSelect-root {
+  margin-top: 20px;
 }
 
 .continput100 .contPhotoUser{
@@ -232,4 +236,16 @@
 .rightCol {
   width: 53%;
   float: right;
+}
+
+.selectCateg label {
+  margin-top: -20px;
+}
+
+.labelFormPerso {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.MuiTable-root a {
+  color: #000 !important;
 }

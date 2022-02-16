@@ -10,7 +10,6 @@ import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 import Pagination from '../component/Pagination';
 import Header from '../component/Header';
-import ProductName from '../component/ProductName';
 
 const ListTransaction = () => {
     const [transaction, setTransaction] = useState([]);
@@ -68,8 +67,8 @@ const ListTransaction = () => {
                                     <TableBody>
                                         {pageOfItems.map((el, index) => (
                                             <TableRow key={index}>
-                                                <TableCell align="left">{el.idProduct} </TableCell>
-                                                <TableCell align="left"><ProductName idProduct={el.idProduct} /></TableCell>
+                                                <TableCell align="left">{el.idProduct._id} </TableCell>
+                                                <TableCell align="left">{el.idProduct.nom}</TableCell>
                                                 <TableCell align="left">+ {el.amount}</TableCell>
                                                 <TableCell align="left">{el.buyingPriceHt}</TableCell>
                                                 <TableCell align="left">{el.taxTva}</TableCell>

@@ -11,7 +11,11 @@ const DeleteProduct = (props) => {
             if (res.status === 200) {
                 props.changeEtatDelete(true);
             } else {
-                console.log(res.data.message);
+                if (res.status === 201) {
+                    alert("Vous pouver pas supprimé ce produit car il contient deja du stock !");
+                } else {
+                    console.log(res.data)
+                }
             }
         });
     }

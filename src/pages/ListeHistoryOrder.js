@@ -65,8 +65,8 @@ const ListeHistoryOrder = () => {
                                     <TableBody>
                                         {pageOfItems.map((el, index) => (
                                             <TableRow key={index}>
-                                                <TableCell align="right"><ProductName idProduct={el.idProduct} /></TableCell>
-                                                <TableCell align="right"><ProviderName idProvider={el.idProvider} /></TableCell>
+                                                <TableCell align="right">{el.idProduct.nom}</TableCell>
+                                                <TableCell align="right">{el.idProvider.name}</TableCell>
                                                 <TableCell align="right">{el.amount}</TableCell>
                                                 <TableCell align="right">{el.date}</TableCell>
                                                 <TableCell align="right">{el.state==="1" ? (<div>Livré</div>) : (<div>Non Livré</div>)}</TableCell>

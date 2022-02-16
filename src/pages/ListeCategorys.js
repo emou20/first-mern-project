@@ -9,30 +9,28 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 
-import DeletClient from '../component/DeletClient';
 import Pagination from '../component/Pagination';
 import Header from '../component/Header';
 
 import { Link } from 'react-router-dom';
 import { FaPlusCircle } from "react-icons/fa";
 import { FaUserEdit } from "react-icons/fa";
+import DeletCategory from '../component/DeletCategory';
 
-
-const ListClients = () => {
-    const [clients, setClients] = useState([]);
+const ListeCategorys = () => {
+    const [categorys, setCategorys] = useState([]);
     const [changeValue, setChangeValue] = useState(false);
-    const [noClients, setNoClients] = useState("");
+    const [noCateg, setNoCateg] = useState("");
     const [pageOfItems, setPageOfItems] = useState([]);
 
-
     useEffect(() => {
-        axios.get('http://localhost:5000/api/client/',{withCredentials: true, credentials: 'include'}
+        axios.get('http://localhost:5000/api/category/',{withCredentials: true, credentials: 'include'}
         )
             .then(response => {
                 if (response.status === 200) {
-                    setClients(response.data);
+                    setCategorys(response.data);
                     if (response.data.length === 0){
-                        setNoClients("Pas d'utilisateurs dans la base")
+                        setNoCateg("Pas de catégories dans la base")
                     }
                 } else {
                     console.log(response.data)
@@ -52,23 +50,22 @@ const ListClients = () => {
         // update state with new page of items
         setPageOfItems( pageOfItems );
     }
+
+
     return (
         <div>
             <Header />
-            <h1>Liste des clients</h1>
+            <h1>Liste des catégories</h1>
             
                 <div>
-                    <Container>
+                <Container>
+                        <Link to="/AddCateg" className="linkAdd"><FaPlusCircle /> Ajouter une catégorie</Link>
                         
                         <TableContainer component={Paper}>
                             <Table size="small" aria-label="a dense table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>FirstName</TableCell>
-                                        <TableCell align="right">LastName</TableCell>
-                                        <TableCell align="right">Phone</TableCell>
-                                        <TableCell align="right">Email</TableCell>
-                                        <TableCell align="right">Adress</TableCell>
+                                        <TableCell>Categorie</TableCell>
                                         <TableCell align="right"></TableCell>
                                         <TableCell align="right"></TableCell>
                                     </TableRow>
@@ -76,29 +73,20 @@ const ListClients = () => {
                                 <TableBody>
                                     {pageOfItems.map((el, index) => (
                                         <TableRow key={index}>
-                                            <TableCell component="th" scope="row">{el.firstName}</TableCell>
-                                            <TableCell align="right">{el.lastName}</TableCell>
-                                            <TableCell align="right">{el.phone}</TableCell>
-                                            <TableCell align="right">{el.email}</TableCell>
-                                            <TableCell align="right">{el.adress}</TableCell>
-                                            <TableCell align="right"><Link to={`/editClient/${el._id}`}><FaUserEdit /></Link> </TableCell>
-                                            <TableCell align="right"><DeletClient idClient={el._id} changeEtatDelete={changeEtat.bind()} /></TableCell>
+                                            <TableCell component="th" scope="row">{el.nameCategory}</TableCell>
+                                            <TableCell align="right"><Link to={`/editCateg/${el._id}`}><FaUserEdit /></Link> </TableCell>
+                                            <TableCell align="right"><DeletCategory idCateg={el._id} changeEtatDelete={changeEtat.bind()} /></TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                        <Pagination items={clients} onChangePage={onChangePage.bind()} />
+                        <Pagination items={categorys} onChangePage={onChangePage.bind()} />
                     </Container>
-                    
-
-
                 </div>
-            
-
             
         </div>
     );
 };
 
-export default ListClients;
+export default ListeCategorys;

@@ -145,7 +145,7 @@ const DeletPruductAmount = () => {
                                                 {products.length > 0 ?
                                                     (
                                                         products.map((el, index) => (
-                                                            <MenuItem key={index} value={el.idProduct}><ProductName idProduct={el.idProduct} /></MenuItem>
+                                                            <MenuItem key={index} value={el.idProduct._id}>{el.idProduct.nom}</MenuItem>
                                                         ))
                                                     ) : (
                                                         <div>Pas de produits</div>

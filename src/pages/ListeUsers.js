@@ -86,7 +86,7 @@ console.log(pageOfItems.length);
                                             <TableCell align="right">{el.email}</TableCell>
                                             <TableCell align="right">{el.adress}</TableCell>
                                             <TableCell align="right">{el.phone}</TableCell>
-                                            <TableCell align="right">{el.role}</TableCell>
+                                            <TableCell align="right">{el.role.nameGroupe}</TableCell>
                                             <TableCell align="right"><Link to={`/editUser/${el._id}`}><FaUserEdit /></Link> </TableCell>
                                             <TableCell align="right"><DeleteUser idUser={el._id} changeEtatDelete={changeEtat.bind()} /></TableCell>
                                         </TableRow>

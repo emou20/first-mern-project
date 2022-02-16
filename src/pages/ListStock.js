@@ -69,8 +69,8 @@ const ListStock = () => {
                                     <TableBody>
                                         {pageOfItems.map((el, index) => (
                                             <TableRow key={index}>
-                                                <TableCell align="left">{el.idProduct} </TableCell>
-                                                <TableCell align="left"><ProductName idProduct={el.idProduct} /></TableCell>
+                                                <TableCell align="left">{el.idProduct._id} </TableCell>
+                                                <TableCell align="left">{el.idProduct.nom}</TableCell>
                                                 <TableCell align="left">{el.amount}</TableCell>
                                                 <TableCell align="left">{el.priceTtc}</TableCell>
                                                 

@@ -65,6 +65,7 @@ const ListProducts = () => {
                                     <TableCell align="right">Nom</TableCell>
                                     <TableCell align="right">Ref</TableCell>
                                     <TableCell align="right">Description</TableCell>
+                                    <TableCell align="right">Catégorie</TableCell>
                                     <TableCell align="right"></TableCell>
                                     <TableCell align="right"></TableCell>
                                 </TableRow>
@@ -80,6 +81,7 @@ const ListProducts = () => {
                                                 <TableCell align="right">{el.nom}</TableCell>
                                                 <TableCell align="right">{el.ref}</TableCell>
                                                 <TableCell align="right">{el.desc}</TableCell>
+                                                <TableCell align="right">{el.categorie.nameCategory}</TableCell>
                                                 <TableCell align="right"><Link to={`/editProduct/${el._id}`}><FaUserEdit /></Link> </TableCell>
                                                 <TableCell align="right"><DeleteProduct idProduct={el._id} changeEtatDelete={changeEtat.bind()} /></TableCell>
                                             </TableRow>

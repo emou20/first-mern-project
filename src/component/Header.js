@@ -13,6 +13,9 @@ const Header = () => {
                 <BlockUserHeader />
                 <ul>
                     <li>
+                    <Link to="/ListCategorie" className="linkRole"><FaUserTie /> Catégorie</Link>
+                    </li>
+                    <li>
                     <Link to="/ListClients" className="linkRole"><FaUserTie /> Clients</Link>
                     </li>
                     <li>

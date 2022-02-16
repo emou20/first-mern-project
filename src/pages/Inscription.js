@@ -356,7 +356,7 @@ const Inscription = (props) => {
                                             >
                                                 {
                                                     roles.map((el, index) => (
-                                                        <MenuItem key={index} value={el.nameGroupe}>{el.nameGroupe}</MenuItem>
+                                                        <MenuItem key={index} value={el._id}>{el.nameGroupe}</MenuItem>
                                                         ))}
 
                                             </Select>

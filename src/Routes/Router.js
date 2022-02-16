@@ -29,7 +29,12 @@ import ListTransaction from '../pages/ListTransaction';
 import DeletPruductAmount from '../pages/DeletPruductAmount';
 import ListDeletedStock from '../pages/ListDeletedStock';
 
+import ListeCategorys from '../pages/ListeCategorys';
+import AddCategory from '../pages/AddCategory';
+import EditCategory from '../pages/EditCategory';
+
 import ListClients from '../pages/ListClients';
+import EditClient from '../pages/EditClient';
 
 const Router = () => (
     
@@ -39,6 +44,11 @@ const Router = () => (
         
         <PrivatRoute exact path="/Roles" component={Roles} />
         <PrivatRoute exact path="/Inscription" component={Inscription} />
+
+        <PrivatRoute exact path="/ListCategorie" component={ListeCategorys} />
+        <PrivatRoute exact path="/AddCateg" component={AddCategory} />
+        <PrivatRoute exact path="/editCateg/:idCateg" component={EditCategory} />
+
 
         <PrivatRoute exact path="/ListeUsers" component={ListeUsers} />
         <PrivatRoute exact path="/editUser/:idUser" component={EditUser} />
@@ -63,6 +73,7 @@ const Router = () => (
         <PrivatRoute exact path="/ListDeletedStock" component={ListDeletedStock} />
         
         <PrivatRoute exact path="/ListClients" component={ListClients} />
+        <PrivatRoute exact path="/editClient/:idClient" component={EditClient} />
 
         <Route component={NotFound} />
     </Switch>

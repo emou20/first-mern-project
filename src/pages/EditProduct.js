@@ -6,6 +6,8 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
+import TextField from '@mui/material/TextField';
+import NativeSelect from '@mui/material/NativeSelect';
 import axios from 'axios';
 import Header from "../component/Header";
 
@@ -18,6 +20,10 @@ const EditProduct = (props) => {
     const [file, setFile] = useState('');
     const [localFoto, setLocalFoto] = useState('');
     const [fotoCarger, setFotoCarger] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const [categorie, setCategorie] = useState("");
+    const [edited, setEdited] = useState(false);
+
 
     const [errorNom, setErrorNom] = useState("");
     const [errorRef, setErrorRef] = useState("");
@@ -36,13 +42,33 @@ const EditProduct = (props) => {
                     setNom(response.data.nom);
                     setRef(response.data.ref);
                     setDesc(response.data.desc);
-                    setLocalFoto(response.data.foto)
+                    setLocalFoto(response.data.foto);
+                    setCategorie(response.data.categorie);
 
                 } else {
                     console.log(response.data)
                 }
 
             });
+
+
+
+
+
+        axios.get('http://localhost:5000/api/category/', { withCredentials: true, credentials: 'include' }
+        )
+            .then(response => {
+                if (response.status === 200) {
+                    setCategories(response.data);
+                    console.log(response.data);
+
+                } else {
+                    console.log(response.data)
+                }
+
+            });
+
+
 
     }, []);
 
@@ -98,6 +124,7 @@ const EditProduct = (props) => {
             data.append("nom", nom);
             data.append("ref", ref);
             data.append("desc", desc);
+            data.append("categorie", categorie);
 
             if (file) {
                 data.append("file", file);
@@ -109,7 +136,8 @@ const EditProduct = (props) => {
                 .then(response => {
                     console.log(response.status);
                     if (response.status !== 500) {
-                        console.log("ok")
+                        console.log("ok");
+                        setEdited(true);
                     } else {
                         setPropGlob("Problème de mise a jour, essayer une autre fois !");
                         console.log(response.data);
@@ -143,6 +171,9 @@ const EditProduct = (props) => {
                 <Card>
                     <CardContent>
                         <div>{propGlob}</div>
+                        {edited ? (
+                            <div>Produit Modifier avec succées</div>
+                        ) : (
                         <form noValidate autoComplete="off">
                             <div className="continput100">
                                 <div className="contPhotoUser">
@@ -187,17 +218,35 @@ const EditProduct = (props) => {
                                     <div className="error">{errorRef}</div>
                                 </div>
                                 <div className="continput1000">
+                                    <div className="labelFormPerso">Description de produit:</div>
                                     <FormControl fullWidth>
-                                        <InputLabel htmlFor="standard-adornment-amount">Description du produit</InputLabel>
-                                        <Input
-                                            id="desc"
-                                            value={desc}
-                                            onChange={(e) => setDesc(e.target.value)}
-                                            name="desc"
 
+                                        <InputLabel id="labelDesc"></InputLabel>
+                                        <TextField
+                                            id="desc"
+                                            multiline
+                                           
+                                            onChange={(e) => setDesc(e.target.value)}
+                                            rows={4}
+                                            defaultValue={desc}
                                         />
                                     </FormControl>
                                     <div className="error">{errorDesc}</div>
+                                </div>
+                                <div className="continput1000 selectCateg">
+
+                                    <FormControl fullWidth>
+                                        <InputLabel >Catégorie :</InputLabel>
+
+                                        <NativeSelect value={categorie} onChange={(e) => setCategorie(e.target.value)}>
+                                            {categories.map((el, index) => (
+                                                
+                                                <option  key={index} value={el._id}>{el.nameCategory}</option>
+                                            ))}
+                                           
+                                        </NativeSelect>
+
+                                    </FormControl>
                                 </div>
 
                                 <div className="contBttEnvoyer continput1000">
@@ -213,6 +262,7 @@ const EditProduct = (props) => {
 
                             </div>
                         </form>
+                        )}
                     </CardContent>
                 </Card>
             </Container>
